@@ -2,6 +2,7 @@ const request = require("supertest");
 const app = require("../db/app");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
+const endpoints = require("../endpoints.json");
 
 beforeEach(() => {
   return seed(db);
@@ -17,12 +18,26 @@ describe("GET topics", () => {
       .get("/api/topics")
       .expect(200)
       .then((res) => {
-        console.log(res.body.topics.rows);
-        expect(Array.isArray(res.body.topics.rows)).toBe(true);
-        res.body.topics.rows.forEach((topics) => {
+        expect(Array.isArray(res.body.topics)).toBe(true);
+        res.body.topics.forEach((topics) => {
           expect(typeof topics.slug).toBe("string");
           expect(typeof topics.description).toBe("string");
         });
+      });
+  });
+});
+
+describe("GET API", () => {
+  test("should return a 200 status code", () => {
+    return request(app).get("/api").expect(200);
+  });
+  test("should return all endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((res) => {
+        expect(typeof res.body.endpoints).toBe("object");
+        expect(res.body.endpoints).toEqual(endpoints);
       });
   });
 });
