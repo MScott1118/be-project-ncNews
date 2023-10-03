@@ -16,11 +16,7 @@ exports.getArticleByID = (req, res, next) => {
   const { article_id } = req.params;
   return fetchArticleByID(article_id)
     .then((returnedArticle) => {
-      if (returnedArticle.length === 0) {
-        return res.status(400).send({ msg: "Invalid article ID" });
-      } else {
-        return res.status(200).send({ article: returnedArticle });
-      }
+      return res.status(200).send({ article: returnedArticle });
     })
     .catch(next);
 };

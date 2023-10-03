@@ -64,7 +64,7 @@ describe("GET /api/article/:article_id", () => {
         expect(typeof res.body.article[0].article_id).toBe("number");
       });
   });
-  test("should return 400 error when passed an article id that doesn't exist", () => {
-    return request(app).get("/api/articles/40").expect(400);
+  test("should return 404 error when passed an article id that doesn't exist", () => {
+    return request(app).get("/api/articles/40").expect(404);
   });
 });
