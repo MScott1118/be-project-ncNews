@@ -46,3 +46,14 @@ exports.fetchArticles = () => {
       return returnedArticles.rows;
     });
 };
+
+exports.fetchArticleComments = (article_id) => {
+  return db
+    .query(`SELECT * FROM comments WHERE article_id = $1`, [article_id])
+    .then((returnedComments) => {
+      if (returnedComments.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Invalid article ID" });
+      }
+      return returnedComments.rows;
+    });
+};

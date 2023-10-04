@@ -95,3 +95,28 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+describe("GET /api/article/:article_id/comments", () => {
+  test("should return a 200 status code", () => {
+    return request(app).get("/api/articles/1/comments").expect(200);
+  });
+  test("should return an array of all comment objects with correct keys", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((res) => {
+        expect(Array.isArray(res.body.comments)).toBe(true);
+        res.body.comments.forEach((comment) => {
+          expect(typeof comment.comment_id).toBe("number");
+          expect(typeof comment.votes).toBe("number");
+          expect(typeof comment.created_at).toBe("string");
+          expect(typeof comment.author).toBe("string");
+          expect(typeof comment.body).toBe("string");
+          expect(typeof comment.article_id).toBe("number");
+        });
+      });
+  });
+  test("should return 404 error when passed an article id that doesn't exist", () => {
+    return request(app).get("/api/articles/40/comments").expect(404);
+  });
+});
