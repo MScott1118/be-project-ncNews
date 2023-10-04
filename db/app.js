@@ -1,5 +1,10 @@
 const express = require("express");
-const { getTopics, getAPI, getArticleByID } = require("../db/controllers");
+const {
+  getTopics,
+  getAPI,
+  getArticleByID,
+  getArticles,
+} = require("../db/controllers");
 const app = express();
 app.use(express.json());
 
@@ -12,4 +17,6 @@ app.use((err, req, res, next) => {
   console.log(err);
   res.status(404).send({ msg: "Invalid article ID" });
 });
+
+app.get("/api/articles", getArticles);
 module.exports = app;

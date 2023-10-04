@@ -68,3 +68,30 @@ describe("GET /api/article/:article_id", () => {
     return request(app).get("/api/articles/40").expect(404);
   });
 });
+
+describe("GET /api/articles", () => {
+  test("should return a 200 status code", () => {
+    return request(app).get("/api/articles").expect(200);
+  });
+  test("should return an array of all article objects with the correct keys", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((res) => {
+        let count = 0;
+        expect(Array.isArray(res.body.article)).toBe(true);
+        res.body.article.forEach((article) => {
+          count++;
+          expect(typeof article.title).toBe("string");
+          expect(typeof article.topic).toBe("string");
+          expect(typeof article.author).toBe("string");
+          expect(typeof article.created_at).toBe("string");
+          expect(typeof article.votes).toBe("number");
+          expect(typeof article.article_img_url).toBe("string");
+          expect(typeof article.article_id).toBe("number");
+          expect(typeof article.comment_count).toBe("string");
+        });
+        expect(count).toBe(36);
+      });
+  });
+});
