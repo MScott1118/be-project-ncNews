@@ -28,6 +28,6 @@ exports.getArticleByID = (req, res, next) => {
 
 exports.getArticles = (req, res) => {
   return fetchArticles().then((returnedArticles) => {
-    return res.status(200).send({ article: returnedArticles });
+    return res.status(200).send({ articles: returnedArticles });
   });
 };
