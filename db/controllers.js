@@ -1,4 +1,4 @@
-const { fetchTopics, fetchAPI } = require("./models");
+const { fetchTopics, fetchAPI, fetchArticleByID } = require("./models");
 
 exports.getTopics = (req, res) => {
   return fetchTopics().then((returnedTopics) => {
@@ -8,7 +8,15 @@ exports.getTopics = (req, res) => {
 
 exports.getAPI = (req, res) => {
   return fetchAPI().then((returnedEndpoints) => {
-    // console.log(returnedEndpoints);
     return res.status(200).send({ endpoints: returnedEndpoints });
   });
+};
+
+exports.getArticleByID = (req, res, next) => {
+  const { article_id } = req.params;
+  return fetchArticleByID(article_id)
+    .then((returnedArticle) => {
+      return res.status(200).send({ article: returnedArticle });
+    })
+    .catch(next);
 };
