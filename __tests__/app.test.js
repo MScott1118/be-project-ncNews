@@ -119,6 +119,11 @@ describe("GET /api/article/:article_id/comments", () => {
   test("should return 404 error when passed an article id that doesn't exist", () => {
     return request(app).get("/api/articles/40/comments").expect(404);
   });
+  // test("should return an empty array if there are no comments", () => {
+  // there are no articles with no comments
+  test("should return 400 error if passed an invalid article ID", () => {
+    return request(app).get("/api/articles/potato/comments").expect(400);
+  });
 });
 
 describe("POST /api/article/:aritcle_id/comments", () => {

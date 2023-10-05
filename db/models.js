@@ -52,7 +52,7 @@ exports.fetchArticleComments = (article_id) => {
     .query(`SELECT * FROM comments WHERE article_id = $1`, [article_id])
     .then((returnedComments) => {
       if (returnedComments.rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "Invalid article ID" });
+        return Promise.reject({ status: 404, msg: "Incorrect article ID" });
       }
       return returnedComments.rows;
     });

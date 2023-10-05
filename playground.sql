@@ -2,4 +2,4 @@
 SELECT * FROM topics;
 SELECT * FROM users;
 SELECT * FROM articles;
-SELECT * FROM comments;
+SELECT * FROM comments ORDER BY article_id;

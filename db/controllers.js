@@ -36,6 +36,9 @@ exports.getArticles = (req, res) => {
 
 exports.getArticleComments = (req, res, next) => {
   const { article_id } = req.params;
+  if (/[^0-9]/.test(article_id)) {
+    return res.status(400).send({ msg: "Invalid article ID" });
+  }
   return fetchArticleComments(article_id)
     .then((returnedComments) => {
       return res.status(200).send({ comments: returnedComments });
