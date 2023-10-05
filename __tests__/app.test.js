@@ -165,3 +165,12 @@ describe("POST /api/article/:aritcle_id/comments", () => {
       .expect(404);
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("should return 204 status code", () => {
+    return request(app).delete("/api/comments/1").expect(204);
+  });
+  test(`should return a 404 status code when passed a comment id that doesn't exist`, () => {
+    return request(app).delete("/api/comments/9999").expect(404);
+  });
+});
