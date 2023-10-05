@@ -59,6 +59,9 @@ exports.postArticleComment = (req, res, next) => {
 
 exports.deleteArticleComment = (req, res, next) => {
   const { comment_id } = req.params;
+  if (/[^0-9]/.test(comment_id)) {
+    return res.status(400).send({ msg: "Invalid comment ID" });
+  }
   removeComment(comment_id)
     .then(() => {
       res.status(204).send();

@@ -173,4 +173,7 @@ describe("DELETE /api/comments/:comment_id", () => {
   test(`should return a 404 status code when passed a comment id that doesn't exist`, () => {
     return request(app).delete("/api/comments/9999").expect(404);
   });
+  test("should return 400 error if passed an invalid comment ID", () => {
+    return request(app).delete("/api/comments/banana").expect(400);
+  });
 });
