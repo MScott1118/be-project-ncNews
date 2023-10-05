@@ -92,6 +92,9 @@ exports.editArticleByID = (article_id, incVotes, res) => {
     if (article.rows.length === 0) {
       return res.status(404).send({ msg: "Incorrect article ID" });
     }
+    if (incVotes === undefined) {
+      return res.status(400).send({ msg: "No body property on request" });
+    }
   });
   return db.query(
     `
