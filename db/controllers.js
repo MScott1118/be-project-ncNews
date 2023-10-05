@@ -48,8 +48,11 @@ exports.getArticleComments = (req, res, next) => {
 
 exports.postArticleComment = (req, res, next) => {
   const { article_id } = req.params;
+  if (/[^0-9]/.test(article_id)) {
+    return res.status(400).send({ msg: "Invalid article ID" });
+  }
   const newComment = req.body;
-  insertComment(article_id, newComment)
+  insertComment(article_id, newComment, res)
     .then((comment) => {
       res.status(201).send({ comment: comment.rows });
     })

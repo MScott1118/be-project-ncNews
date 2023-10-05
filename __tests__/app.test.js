@@ -144,7 +144,6 @@ describe("POST /api/article/:aritcle_id/comments", () => {
         username: "jessjelly",
         body: "Great article!",
       })
-      .expect(201)
       .then((res) => {
         expect(Array.isArray(res.body.comment)).toBe(true);
         expect(typeof res.body.comment[0].comment_id).toBe("number");
@@ -152,7 +151,7 @@ describe("POST /api/article/:aritcle_id/comments", () => {
         expect(typeof res.body.comment[0].created_at).toBe("string");
         expect(typeof res.body.comment[0].author).toBe("string");
         expect(typeof res.body.comment[0].body).toBe("string");
-        expect(typeof res.body.comment[0].article_id).toBe("number");
+        expect(res.body.comment[0].article_id).toBe(1);
       });
   });
   test("should return 404 error when passed an article id that doesn't exist", () => {
@@ -162,6 +161,44 @@ describe("POST /api/article/:aritcle_id/comments", () => {
         username: "jessjelly",
         body: "Great article!",
       })
-      .expect(404);
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Incorrect article ID");
+      });
+  });
+  test("should return 400 error if passed an invalid article ID", () => {
+    return request(app)
+      .post("/api/articles/potato/comments")
+      .send({
+        username: "jessjelly",
+        body: "Great article!",
+      })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid article ID");
+      });
+  });
+  test(`should return 404 error if passed a username that doesn't exist`, () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "MichaelScott24",
+        body: "Great article!",
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Username not found");
+      });
+  });
+  test("should return 400 error if no body is passed", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "jessjelly",
+      })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("No body property on request");
+      });
   });
 });

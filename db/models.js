@@ -58,9 +58,24 @@ exports.fetchArticleComments = (article_id) => {
     });
 };
 
-exports.insertComment = (article_id, newComment) => {
+exports.insertComment = (article_id, newComment, res) => {
   const body = newComment.body;
   const username = newComment.username;
+  const allUsernames = Promise.resolve(db.query(`SELECT username FROM users;`));
+  allUsernames.then((value) => {
+    count = 0;
+    value.rows.forEach((element) => {
+      if (element.username === username) {
+        count++;
+      }
+    });
+    if (count === 0) {
+      res.status(404).send({ msg: "Username not found" });
+    }
+    if (body === undefined) {
+      res.status(400).send({ msg: "No body property on request" });
+    }
+  });
   return db.query(
     `INSERT INTO comments (body, author, article_id)
   VALUES ($1, $2, $3)
