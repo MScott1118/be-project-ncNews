@@ -6,6 +6,7 @@ const {
   fetchArticleComments,
   insertComment,
   removeComment,
+  editArticleByID,
 } = require("./models");
 
 exports.getTopics = (req, res) => {
@@ -49,8 +50,11 @@ exports.getArticleComments = (req, res, next) => {
 
 exports.postArticleComment = (req, res, next) => {
   const { article_id } = req.params;
+  if (/[^0-9]/.test(article_id)) {
+    return res.status(400).send({ msg: "Invalid article ID" });
+  }
   const newComment = req.body;
-  insertComment(article_id, newComment)
+  insertComment(article_id, newComment, res)
     .then((comment) => {
       res.status(201).send({ comment: comment.rows });
     })
@@ -65,6 +69,19 @@ exports.deleteArticleComment = (req, res, next) => {
   removeComment(comment_id)
     .then(() => {
       res.status(204).send();
+    })
+    .catch(next);
+};
+
+exports.patchArticleByID = (req, res, next) => {
+  const { article_id } = req.params;
+  if (/[^0-9]/.test(article_id)) {
+    return res.status(400).send({ msg: "Invalid article ID" });
+  }
+  const incVotes = req.body;
+  editArticleByID(article_id, incVotes, res)
+    .then((returnedArticle) => {
+      res.status(200).send({ article: returnedArticle.rows });
     })
     .catch(next);
 };
