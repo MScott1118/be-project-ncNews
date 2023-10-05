@@ -5,6 +5,7 @@ const {
   fetchArticles,
   fetchArticleComments,
   insertComment,
+  editArticleByID,
 } = require("./models");
 
 exports.getTopics = (req, res) => {
@@ -55,6 +56,19 @@ exports.postArticleComment = (req, res, next) => {
   insertComment(article_id, newComment, res)
     .then((comment) => {
       res.status(201).send({ comment: comment.rows });
+    })
+    .catch(next);
+};
+
+exports.patchArticleByID = (req, res, next) => {
+  const { article_id } = req.params;
+  if (/[^0-9]/.test(article_id)) {
+    return res.status(400).send({ msg: "Invalid article ID" });
+  }
+  const incVotes = req.body;
+  editArticleByID(article_id, incVotes, res)
+    .then((returnedArticle) => {
+      res.status(200).send({ article: returnedArticle.rows });
     })
     .catch(next);
 };
