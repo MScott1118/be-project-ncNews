@@ -120,3 +120,42 @@ describe("GET /api/article/:article_id/comments", () => {
     return request(app).get("/api/articles/40/comments").expect(404);
   });
 });
+
+describe("POST /api/article/:aritcle_id/comments", () => {
+  test("should return a 201 status code", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "jessjelly",
+        body: "Great article!",
+      })
+      .expect(201);
+  });
+  test("should return the new comment object with the correct keys", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "jessjelly",
+        body: "Great article!",
+      })
+      .expect(201)
+      .then((res) => {
+        expect(Array.isArray(res.body.comment)).toBe(true);
+        expect(typeof res.body.comment[0].comment_id).toBe("number");
+        expect(typeof res.body.comment[0].votes).toBe("number");
+        expect(typeof res.body.comment[0].created_at).toBe("string");
+        expect(typeof res.body.comment[0].author).toBe("string");
+        expect(typeof res.body.comment[0].body).toBe("string");
+        expect(typeof res.body.comment[0].article_id).toBe("number");
+      });
+  });
+  test("should return 404 error when passed an article id that doesn't exist", () => {
+    return request(app)
+      .post("/api/articles/40/comments")
+      .send({
+        username: "jessjelly",
+        body: "Great article!",
+      })
+      .expect(404);
+  });
+});

@@ -5,6 +5,7 @@ const {
   getArticleByID,
   getArticles,
   getArticleComments,
+  postArticleComment,
 } = require("../db/controllers");
 const app = express();
 app.use(express.json());
@@ -25,4 +26,8 @@ app.use((err, req, res, next) => {
   res.status(404).send({ msg: "Invalid article ID" });
 });
 
+app.post("/api/articles/:article_id/comments", postArticleComment);
+app.use((err, req, res, next) => {
+  res.status(404).send({ msg: "Invalid article ID" });
+});
 module.exports = app;
