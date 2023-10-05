@@ -6,6 +6,7 @@ const {
   getArticles,
   getArticleComments,
   postArticleComment,
+  patchArticleByID,
 } = require("../db/controllers");
 const app = express();
 app.use(express.json());
@@ -27,6 +28,11 @@ app.use((err, req, res, next) => {
 });
 
 app.post("/api/articles/:article_id/comments", postArticleComment);
+app.use((err, req, res, next) => {
+  res.status(404).send({ msg: "Incorrect article ID" });
+});
+
+app.patch("/api/articles/:article_id", patchArticleByID);
 app.use((err, req, res, next) => {
   res.status(404).send({ msg: "Incorrect article ID" });
 });

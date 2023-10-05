@@ -43,7 +43,7 @@ describe("GET /api", () => {
   });
 });
 
-describe("GET /api/article/:article_id", () => {
+describe("GET /api/articles/:article_id", () => {
   test("should return a 200 status code", () => {
     return request(app).get("/api/articles/1").expect(200);
   });
@@ -97,7 +97,7 @@ describe("GET /api/articles", () => {
   });
 });
 
-describe("GET /api/article/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test("should return a 200 status code", () => {
     return request(app).get("/api/articles/1/comments").expect(200);
   });
@@ -127,7 +127,7 @@ describe("GET /api/article/:article_id/comments", () => {
   });
 });
 
-describe("POST /api/article/:aritcle_id/comments", () => {
+describe("POST /api/articles/:aritcle_id/comments", () => {
   test("should return a 201 status code", () => {
     return request(app)
       .post("/api/articles/1/comments")
@@ -199,6 +199,86 @@ describe("POST /api/article/:aritcle_id/comments", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("No body property on request");
+      });
+  });
+});
+
+describe("PATCH /api/aritcles/:article_id", () => {
+  test("should return a 200 status code", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({
+        inc_votes: 1,
+      })
+      .expect(200);
+  });
+  test("should return the new article object with the correct keys and updated values", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({
+        inc_votes: 1,
+      })
+      .then((res) => {
+        expect(res.body.article[0]).toEqual({
+          article_id: 1,
+          title: "Running a Node App",
+          topic: "coding",
+          author: "jessjelly",
+          body: "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+          created_at: "2020-11-07T06:03:00.000Z",
+          votes: 1,
+          article_img_url:
+            "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+        });
+      });
+  });
+  test("should return a 404 status code when passed an incorrect article id", () => {
+    return request(app)
+      .patch("/api/articles/40")
+      .send({
+        inc_votes: 1,
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Incorrect article ID");
+      });
+  });
+  test("should return 400 status code when passed an invalid article ID", () => {
+    return request(app)
+      .patch("/api/articles/potato")
+      .send({ inc_votes: 1 })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid article ID");
+      });
+  });
+  test("should return 400 status code when passed no body", () => {
+    return request(app)
+      .patch("/api/articles/potato")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid article ID");
+      });
+  });
+  test("should ignore any other properties on the request body", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({
+        inc_votes: 1,
+        example: "example",
+      })
+      .then((res) => {
+        expect(res.body.article[0]).toEqual({
+          article_id: 1,
+          title: "Running a Node App",
+          topic: "coding",
+          author: "jessjelly",
+          body: "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+          created_at: "2020-11-07T06:03:00.000Z",
+          votes: 1,
+          article_img_url:
+            "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+        });
       });
   });
 });
