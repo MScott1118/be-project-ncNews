@@ -46,3 +46,25 @@ exports.fetchArticles = () => {
       return returnedArticles.rows;
     });
 };
+
+exports.fetchArticleComments = (article_id) => {
+  return db
+    .query(`SELECT * FROM comments WHERE article_id = $1`, [article_id])
+    .then((returnedComments) => {
+      if (returnedComments.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Incorrect article ID" });
+      }
+      return returnedComments.rows;
+    });
+};
+
+exports.insertComment = (article_id, newComment) => {
+  const body = newComment.body;
+  const username = newComment.username;
+  return db.query(
+    `INSERT INTO comments (body, author, article_id)
+  VALUES ($1, $2, $3)
+  RETURNING *`,
+    [body, username, article_id]
+  );
+};
