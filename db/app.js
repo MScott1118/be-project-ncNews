@@ -6,6 +6,7 @@ const {
   getArticles,
   getArticleComments,
   postArticleComment,
+  deleteArticleComment,
   patchArticleByID,
 } = require("../db/controllers");
 const app = express();
@@ -32,8 +33,14 @@ app.use((err, req, res, next) => {
   res.status(404).send({ msg: "Incorrect article ID" });
 });
 
+app.delete("/api/comments/:comment_id", deleteArticleComment);
+app.use((err, req, res, next) => {
+  res.status(404).send({ msg: "Incorrect comment ID" });
+});
+
 app.patch("/api/articles/:article_id", patchArticleByID);
 app.use((err, req, res, next) => {
   res.status(404).send({ msg: "Incorrect article ID" });
 });
+
 module.exports = app;

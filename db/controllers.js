@@ -5,6 +5,7 @@ const {
   fetchArticles,
   fetchArticleComments,
   insertComment,
+  removeComment,
   editArticleByID,
 } = require("./models");
 
@@ -56,6 +57,18 @@ exports.postArticleComment = (req, res, next) => {
   insertComment(article_id, newComment, res)
     .then((comment) => {
       res.status(201).send({ comment: comment.rows });
+    })
+    .catch(next);
+};
+
+exports.deleteArticleComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  if (/[^0-9]/.test(comment_id)) {
+    return res.status(400).send({ msg: "Invalid comment ID" });
+  }
+  removeComment(comment_id)
+    .then(() => {
+      res.status(204).send();
     })
     .catch(next);
 };
