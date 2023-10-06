@@ -7,6 +7,7 @@ const {
   insertComment,
   removeComment,
   editArticleByID,
+  fetchUsers,
 } = require("./models");
 
 exports.getTopics = (req, res) => {
@@ -84,4 +85,10 @@ exports.patchArticleByID = (req, res, next) => {
       res.status(200).send({ article: returnedArticle.rows });
     })
     .catch(next);
+};
+
+exports.getUsers = (req, res) => {
+  return fetchUsers().then((returnedUsers) => {
+    return res.status(200).send({ users: returnedUsers });
+  });
 };

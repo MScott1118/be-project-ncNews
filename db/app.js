@@ -8,6 +8,7 @@ const {
   postArticleComment,
   deleteArticleComment,
   patchArticleByID,
+  getUsers,
 } = require("../db/controllers");
 const app = express();
 app.use(express.json());
@@ -42,5 +43,7 @@ app.patch("/api/articles/:article_id", patchArticleByID);
 app.use((err, req, res, next) => {
   res.status(404).send({ msg: "Incorrect article ID" });
 });
+
+app.get("/api/users", getUsers);
 
 module.exports = app;
