@@ -95,6 +95,23 @@ describe("GET /api/articles", () => {
         });
       });
   });
+  test("should be able to filter by topic", () => {
+    return request(app)
+      .get("/api/articles?topic=cooking")
+      .then((res) => {
+        res.body.articles.forEach((article) => {
+          expect(article.topic).toBe("cooking");
+        });
+      });
+  });
+  test("should respond with an empty array when there are no results that meet the query", () => {
+    return request(app)
+      .get("/api/articles?topic=example")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toEqual([]);
+      });
+  });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
