@@ -419,3 +419,8 @@ You are now connected to database "nc_news" as user "mscott".
          90 | Maxime error necessitatibus voluptatibus labore aliquid. Animi a maiores quo aut quia libero repellendus aut delectus. Illo dolorem sit eos at molestias sed. Sint quibusdam harum eos quidem praesentium corporis. Ut dolor aut consectetur nisi deserunt.                                                                                                                      |         36 | jessjelly    |     2 | 2020-01-16 00:00:00
 (300 rows)
 
+ article_id |  author   |       title        | topic  |     created_at      | votes |                                 article_img_url                                  | comment_count 
+------------+-----------+--------------------+--------+---------------------+-------+----------------------------------------------------------------------------------+---------------
+          1 | jessjelly | Running a Node App | coding | 2020-11-07 06:03:00 |     0 | https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700 |             8
+(1 row)
+
