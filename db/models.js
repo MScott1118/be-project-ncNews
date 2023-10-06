@@ -119,3 +119,9 @@ exports.editArticleByID = (article_id, incVotes, res) => {
     [incVotes.inc_votes, article_id]
   );
 };
+
+exports.fetchUsers = () => {
+  return db.query("SELECT * FROM users;").then((returnedUsers) => {
+    return returnedUsers.rows;
+  });
+};

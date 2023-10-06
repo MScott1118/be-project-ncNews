@@ -294,3 +294,23 @@ describe("DELETE /api/comments/:comment_id", () => {
     return request(app).delete("/api/comments/banana").expect(400);
   });
 });
+
+describe("GET /api/users", () => {
+  test("Should return 200 status code", () => {
+    return request(app).get("/api/users").expect(200);
+  });
+  test("should return an array of all user objects with correct keys", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.users.length).toBe(6);
+        expect(Array.isArray(res.body.users)).toBe(true);
+        res.body.users.forEach((user) => {
+          expect(typeof user.username).toBe("string");
+          expect(typeof user.name).toBe("string");
+          expect(typeof user.avatar_url).toBe("string");
+        });
+      });
+  });
+});
