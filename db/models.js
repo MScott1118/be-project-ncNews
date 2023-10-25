@@ -50,7 +50,8 @@ exports.fetchArticles = (topic) => {
       a.article_id, 
       a.author, 
       a.title, 
-      a.topic, 
+      a.topic,
+      a.body, 
       a.created_at, 
       a.votes, 
       a.article_img_url, 
@@ -73,7 +74,8 @@ exports.fetchArticles = (topic) => {
       a.title, 
       a.topic, 
       a.created_at, 
-      a.votes, 
+      a.votes,
+      a.body, 
       a.article_img_url, 
       COUNT(c.article_id = a.article_id) AS comment_count
       FROM articles AS a
